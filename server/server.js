@@ -47,6 +47,12 @@ app.get('/length', (req, res) => {
   res.end();
 });
 
+app.get('/keyword', (req, res) => {
+  res.status(200);
+  res.json(keyword);
+  res.end();
+});
+
 app.listen(port, () => {
   console.log(`Server Loaded, http://localhost:${port}`);
 });

@@ -5,6 +5,9 @@ const api = {
   getBoxItemLength : () => {
     return api.sendRequest('length');
   },
+  getKeyword: () => {
+    return api.sendRequest('keyword');
+  },
   sendRequest: (query, method = 'GET') => {
     return fetch(`http://localhost:3000/${query}`, {
       method,
