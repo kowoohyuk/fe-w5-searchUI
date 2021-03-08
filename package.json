@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/kowoohyuk/fe-w5-searchUI#readme",
   "dependencies": {
+    "node-fetch": "^2.6.1",
     "parcel": "^1.12.4"
   },
   "devDependencies": {
