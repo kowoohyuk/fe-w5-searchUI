@@ -8,6 +8,9 @@ const api = {
   getKeyword: () => {
     return api.sendRequest('keyword');
   },
+  getSearchList: async keyword => {
+    return api.sendRequest(`search?word=${keyword}`);
+  },
   sendRequest: (query, method = 'GET') => {
     return fetch(`http://localhost:3000/${query}`, {
       method,
@@ -23,8 +26,8 @@ const api = {
       }
     })
     .then(json => json)
-    .catch(error => console.log(err));
-  }
+    .catch(error => console.log(error));
+  },
 }
 
 module.exports = api;
