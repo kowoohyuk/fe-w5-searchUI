@@ -11,6 +11,7 @@ const eventItemTarget = document.getElementById('eventItemTarget');
 const themePagingArrow = document.getElementById('themePagingArrow');
 const themeTarget = document.getElementById('themeTarget');
 const numberWithCommas = s => String(s).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+const rollKeywordTarget = document.getElementById('rollKeywordTarget');
 
 const init = () => {
   
@@ -154,6 +155,11 @@ const init = () => {
     }, 500);
   }
 
+  const getKeyword = async () => {
+    const data = await api.getKeyword();
+    if(data) renderRoll(data);
+  }
+
   const getEvent = async () => {
     const data = await api.getItem('event');
     if(data) renderEvent(data);
@@ -208,7 +214,24 @@ const init = () => {
     delete target.dataset.moved;
     clearInterval(themePagingInterval);
   });
+  let rollKeyword = null;
+  const renderRoll = list => {
+    const str = list.reduce((acc, cur, i) => acc += `<li><span class="keyword__rank">${i + 1}</span><span>${cur}</span></li>`, '');
+    rollKeywordTarget.innerHTML = str;
+    rollKeywordTarget.dataset.height = rollKeywordTarget.firstElementChild.getBoundingClientRect().height;
+    rollKeyword = setInterval(() => keywordRoll(rollKeywordTarget), 1500);
+  }
+  const keywordRoll = target => {
+    target.classList.add('transition-on');
+    target.style.transform = `translateY(${-target.dataset.height}px)`;
+    setTimeout(() => {
+      target.classList.remove('transition-on');
+      target.insertBefore(target.firstElementChild, null);
+      target.style.transform = `translateY(0px)`;
+    }, 300);
+  };
 
+  getKeyword();
   getBoxLength();
   getBox();
   getBest();
