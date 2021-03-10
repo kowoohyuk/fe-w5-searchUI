@@ -20,7 +20,7 @@ const init = () => {
   
   ////////////// Best
   const getBest = async () => {
-    const data = await api.getItem('best');
+    const data = await api.getItem({ type : 'best' });
     if(data) renderBest(data);
   };
   const renderBest = ({prefix, list}) => bestItemTarget.innerHTML = `<a class="carousel__item"><img src="${prefix}${list[0].src}"></a>`;
@@ -113,8 +113,8 @@ const init = () => {
   }
 
   const renderBox = ({prefix, list}) => {
-    /*html*/
     const str = list.reduce((acc, cur) => 
+    /*html*/
       acc += `
       <a class="box__item" href="">
         <img class="box__item__img" src="${prefix}${cur.src}" alt="">
@@ -134,12 +134,12 @@ const init = () => {
 
   ////////////// Theme carousel
   const getTheme = async () => {
-    const data = await api.getItem({type: 'carousel'});
+    const data = await api.getItem({ type: 'carousel' });
     if(data) renderTheme(data);
   }
   const renderTheme = ({prefix, list}) => {
-    /*html*/
     const str = list.reduce((acc, cur) => {
+      /*html*/
       acc += `
       <a class="box__item carousel__item" href="">
         <img class="box__item__img" src="${prefix}${cur.src}">
@@ -163,12 +163,12 @@ const init = () => {
   }
 
   const getEvent = async () => {
-    const data = await api.getItem('event');
+    const data = await api.getItem({ type : 'event' });
     if(data) renderEvent(data);
   };
 
   const renderEvent = ({prefix, list}) => {
-    str = list.reduce((acc, cur) => acc += `<a class="panel__item"><img src="${prefix}${cur.src}"></a>`, '');
+    const str = list.reduce((acc, cur) => acc += `<a class="panel__item"><img src="${prefix}${cur.src}"></a>`, '');
     eventItemTarget.innerHTML = str;
     eventItemTarget.insertBefore(eventItemTarget.lastElementChild, eventItemTarget.firstElementChild);
   }
