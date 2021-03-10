@@ -1,7 +1,8 @@
-const app = require("express")();
-const fetch = require('node-fetch');
-const { keyword, best, event, carousel, box } = require('./response.json');
-
+import express from 'express';
+import fetch from 'node-fetch';
+import { responseJson } from './response.js';
+const { keyword, best, event, carousel, box } = responseJson;
+const app = express();
 const PORT = 3000;
 const AMAZONPATH = 'https://completion.amazon.com/api/2017/suggestions?mid=ATVPDKIKX0DER&alias=aps&suggestion-type=KEYWORD&prefix=';
 
