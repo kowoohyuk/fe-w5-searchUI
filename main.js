@@ -1,4 +1,4 @@
-const api = require('./api');
+const api = require('./src/javascript/api');
 const moreBoxButton = document.getElementById('moreBoxButton');
 const viewBoxCount = document.getElementById('viewBoxCount');
 const totalBoxCount = document.getElementById('totalBoxCount');
@@ -84,7 +84,8 @@ const init = () => {
   let moreBoxNowPage = 1;
   let moreBoxRowNumber = 5;
   const getBox = async () => {
-    const data = await api.getItem('box', moreBoxNowPage, moreBoxRowNumber);
+    const data = await api.getItem({ type: 'box', page: moreBoxNowPage, count: moreBoxRowNumber});
+    console.log(data);
     if(data) {
       moreBoxNowPage += 1;
       setviewBoxCount(data.list.length);
