@@ -3,7 +3,7 @@ import API from './api.js';
 const api = new API();
 const numberWithCommas = s => String(s).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-export default function Box({target, buttonTarget, page = 1, count = 5}) {
+export default function Box({ target, buttonTarget, page = 1, count = 5 }) {
   this.target = target;
   this.buttonTarget = buttonTarget;
   this.page = page;

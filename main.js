@@ -1,8 +1,8 @@
 import API from './src/javascript/api.js';
 import RollKeyword from './src/javascript/rollKeyword.js';
 import Box from './src/javascript/box.js';
+import Best from './src/javascript/best.js';
 
-const bestItemTarget = document.getElementById('bestItemTarget');
 const pagingArrow = document.getElementById('pagingArrow');
 const pagingHover = document.getElementById('pagingHover');
 const panel = document.querySelector('.panel');
@@ -10,7 +10,7 @@ const eventItemTarget = document.getElementById('eventItemTarget');
 const themePagingArrow = document.getElementById('themePagingArrow');
 const themeTarget = document.getElementById('themeTarget');
 
-
+const bestItemTarget = document.getElementById('bestTarget');
 const rollKeywordTarget = document.getElementById('rollKeywordTarget');
 const boxTarget = document.getElementById('boxTarget');
 const moreButtonTarget = document.getElementById('moreButtonTarget');
@@ -18,13 +18,6 @@ const moreButtonTarget = document.getElementById('moreButtonTarget');
 const api = new API();
 
 const init = () => {
-  
-  ////////////// Best
-  const getBest = async () => {
-    const data = await api.getItem({ type : 'best' });
-    if(data) renderBest(data);
-  };
-  const renderBest = ({prefix, list}) => bestItemTarget.innerHTML = `<a class="carousel__item"><img src="${prefix}${list[0].src}"></a>`;
 
   const moveCarousel = (target, transition = true) => {
     if(target.dataset.arrow === 'prev') {
@@ -170,8 +163,9 @@ const init = () => {
   
 
   createRollKeyword(rollKeywordTarget);
+  createBest(bestItemTarget);
   createBox({target : boxTarget, buttonTarget : moreButtonTarget });
-  getBest();
+
   getEvent();
   getTheme();
 }
@@ -180,6 +174,12 @@ const createRollKeyword = async target => {
   const keywords = await api.getKeyword();
   const rollKeyword = new RollKeyword({target, keywords});
   rollKeyword.init();
+}
+
+const createBest = async target => {
+  const data = await api.getItem({ type : 'best' });
+  const best = new Best({ target, ...data });
+  best.init();
 }
 
 const createBox = ({ target, buttonTarget }) => {
