@@ -1,4 +1,6 @@
-const api = require('./api');
+import API from './src/javascript/api.js';
+import RollKeyword from './src/javascript/rollKeyword.js';
+
 const moreBoxButton = document.getElementById('moreBoxButton');
 const viewBoxCount = document.getElementById('viewBoxCount');
 const totalBoxCount = document.getElementById('totalBoxCount');
@@ -11,13 +13,14 @@ const eventItemTarget = document.getElementById('eventItemTarget');
 const themePagingArrow = document.getElementById('themePagingArrow');
 const themeTarget = document.getElementById('themeTarget');
 const numberWithCommas = s => String(s).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-const rollKeywordTarget = document.getElementById('rollKeywordTarget');
+
+const api = new API();
 
 const init = () => {
   
   ////////////// Best
   const getBest = async () => {
-    const data = await api.getItem('best');
+    const data = await api.getItem({ type : 'best' });
     if(data) renderBest(data);
   };
   const renderBest = ({prefix, list}) => bestItemTarget.innerHTML = `<a class="carousel__item"><img src="${prefix}${list[0].src}"></a>`;
@@ -84,7 +87,8 @@ const init = () => {
   let moreBoxNowPage = 1;
   let moreBoxRowNumber = 5;
   const getBox = async () => {
-    const data = await api.getItem('box', moreBoxNowPage, moreBoxRowNumber);
+    const data = await api.getItem({ type: 'box', page: moreBoxNowPage, count: moreBoxRowNumber});
+    console.log(data);
     if(data) {
       moreBoxNowPage += 1;
       setviewBoxCount(data.list.length);
@@ -109,8 +113,8 @@ const init = () => {
   }
 
   const renderBox = ({prefix, list}) => {
+    const str = list.reduce((acc, cur) => 
     /*html*/
-    str = list.reduce((acc, cur) => 
       acc += `
       <a class="box__item" href="">
         <img class="box__item__img" src="${prefix}${cur.src}" alt="">
@@ -130,14 +134,14 @@ const init = () => {
 
   ////////////// Theme carousel
   const getTheme = async () => {
-    const data = await api.getItem('carousel');
+    const data = await api.getItem({ type: 'carousel' });
     if(data) renderTheme(data);
   }
   const renderTheme = ({prefix, list}) => {
-    /*html*/
-    str = list.reduce((acc, cur) => {
+    const str = list.reduce((acc, cur) => {
+      /*html*/
       acc += `
-      <a class="box__item" href="">
+      <a class="box__item carousel__item" href="">
         <img class="box__item__img" src="${prefix}${cur.src}">
         <span class="box__item__title">${cur.title}</span>
         <span class="box__item__content">${cur.content}</span>
@@ -147,6 +151,9 @@ const init = () => {
     }, '');
     themeTarget.style.width = `${list.length * 20}%`;
     themeTarget.innerHTML = str;
+    // 작업 중
+    // const tmp = new Carousel(themeTarget, themeTarget.querySelectorAll('.carousel__item'));
+    // tmp.init();
     setTimeout(() => {
       const childWidth = themeTarget.firstElementChild.getBoundingClientRect().width;
       themeTarget.dataset.width = childWidth;
@@ -155,18 +162,13 @@ const init = () => {
     }, 500);
   }
 
-  const getKeyword = async () => {
-    const data = await api.getKeyword();
-    if(data) renderRoll(data);
-  }
-
   const getEvent = async () => {
-    const data = await api.getItem('event');
+    const data = await api.getItem({ type : 'event' });
     if(data) renderEvent(data);
   };
 
   const renderEvent = ({prefix, list}) => {
-    str = list.reduce((acc, cur) => acc += `<a class="panel__item"><img src="${prefix}${cur.src}"></a>`, '');
+    const str = list.reduce((acc, cur) => acc += `<a class="panel__item"><img src="${prefix}${cur.src}"></a>`, '');
     eventItemTarget.innerHTML = str;
     eventItemTarget.insertBefore(eventItemTarget.lastElementChild, eventItemTarget.firstElementChild);
   }
@@ -214,29 +216,21 @@ const init = () => {
     delete target.dataset.moved;
     clearInterval(themePagingInterval);
   });
-  let rollKeyword = null;
-  const renderRoll = list => {
-    const str = list.reduce((acc, cur, i) => acc += `<li><span class="keyword__rank">${i + 1}</span><span>${cur}</span></li>`, '');
-    rollKeywordTarget.innerHTML = str;
-    rollKeywordTarget.dataset.height = rollKeywordTarget.firstElementChild.getBoundingClientRect().height;
-    rollKeyword = setInterval(() => keywordRoll(rollKeywordTarget), 1500);
-  }
-  const keywordRoll = target => {
-    target.classList.add('transition-on');
-    target.style.transform = `translateY(${-target.dataset.height}px)`;
-    setTimeout(() => {
-      target.classList.remove('transition-on');
-      target.insertBefore(target.firstElementChild, null);
-      target.style.transform = `translateY(0px)`;
-    }, 300);
-  };
+  
+  const rollKeywordTarget = document.getElementById('rollKeywordTarget');
+  createRollKeyword(rollKeywordTarget);
 
-  getKeyword();
   getBoxLength();
   getBox();
   getBest();
   getEvent();
   getTheme();
+}
+
+const createRollKeyword = async target => {
+  const keywords = await api.getKeyword();
+  const rollKeyword = new RollKeyword({target, keywords});
+  rollKeyword.init();
 }
 
 init();
