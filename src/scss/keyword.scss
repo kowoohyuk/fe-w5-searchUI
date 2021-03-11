@@ -1,0 +1,26 @@
+.roll-keyword {
+  position: absolute;
+  top: 0;
+  overflow: hidden;
+  height: 50px;
+  .keyword {
+    padding: 0 2.5em;
+    text-align: left;
+    font-size: 18px;
+    font-weight: 600;
+    opacity: 0.5;
+    position: relative;
+    &.transition-on {
+      transition: all 0.3s linear;
+    }
+    li {
+      height: 50px;
+      padding: 0 0.5em;
+      line-height: 50px;
+    }
+    &__rank {
+      margin-right: 1em;
+      font-style: italic;
+    }
+  }
+}
