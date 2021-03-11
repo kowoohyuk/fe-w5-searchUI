@@ -1,10 +1,7 @@
 import API from './src/javascript/api.js';
 import RollKeyword from './src/javascript/rollKeyword.js';
+import Box from './src/javascript/box.js';
 
-const moreBoxButton = document.getElementById('moreBoxButton');
-const viewBoxCount = document.getElementById('viewBoxCount');
-const totalBoxCount = document.getElementById('totalBoxCount');
-const boxTarget = document.getElementById('boxTarget');
 const bestItemTarget = document.getElementById('bestItemTarget');
 const pagingArrow = document.getElementById('pagingArrow');
 const pagingHover = document.getElementById('pagingHover');
@@ -12,7 +9,11 @@ const panel = document.querySelector('.panel');
 const eventItemTarget = document.getElementById('eventItemTarget');
 const themePagingArrow = document.getElementById('themePagingArrow');
 const themeTarget = document.getElementById('themeTarget');
-const numberWithCommas = s => String(s).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+
+const rollKeywordTarget = document.getElementById('rollKeywordTarget');
+const boxTarget = document.getElementById('boxTarget');
+const moreButtonTarget = document.getElementById('moreButtonTarget');
 
 const api = new API();
 
@@ -83,55 +84,6 @@ const init = () => {
     }
   });
 
-  ////////////// Box
-  let moreBoxNowPage = 1;
-  let moreBoxRowNumber = 5;
-  const getBox = async () => {
-    const data = await api.getItem({ type: 'box', page: moreBoxNowPage, count: moreBoxRowNumber});
-    console.log(data);
-    if(data) {
-      moreBoxNowPage += 1;
-      setviewBoxCount(data.list.length);
-      renderBox(data);
-    }
-    checkMoreButton();
-  }
-
-  const getBoxLength = async () => {
-    const data = await api.getBoxItemLength();
-    if(data) setTotalBoxCount(data.length);
-  }
-
-  const setTotalBoxCount = length => {
-    if(length)
-      totalBoxCount.textContent = length;
-  }
-
-  const setviewBoxCount = length => {
-    if(length)
-      viewBoxCount.textContent = viewBoxCount.textContent ? +viewBoxCount.textContent + length : length;
-  }
-
-  const renderBox = ({prefix, list}) => {
-    const str = list.reduce((acc, cur) => 
-    /*html*/
-      acc += `
-      <a class="box__item" href="">
-        <img class="box__item__img" src="${prefix}${cur.src}" alt="">
-        <span class="box__item__title">${cur.title}</span>
-        <span class="box__item__price">${numberWithCommas(cur.price)}원</span>
-      </a>
-      `
-    , '');
-    boxTarget.insertAdjacentHTML('beforeend', str);
-  }
-
-  const checkMoreButton = () => {
-    if(+viewBoxCount.textContent >= +totalBoxCount.textContent) {
-      moreBoxButton.classList.add('not-used');
-    }
-  }
-
   ////////////// Theme carousel
   const getTheme = async () => {
     const data = await api.getItem({ type: 'carousel' });
@@ -200,7 +152,6 @@ const init = () => {
     }, 300);
   }
 
-  moreBoxButton.addEventListener('click', () => getBox());
   pagingArrow.addEventListener('click', ({ target }) => moveCarousel(target));
   let themePagingInterval = null;
   themePagingArrow.addEventListener('mousedown', ({ target }) => {
@@ -217,11 +168,9 @@ const init = () => {
     clearInterval(themePagingInterval);
   });
   
-  const rollKeywordTarget = document.getElementById('rollKeywordTarget');
-  createRollKeyword(rollKeywordTarget);
 
-  getBoxLength();
-  getBox();
+  createRollKeyword(rollKeywordTarget);
+  createBox({target : boxTarget, buttonTarget : moreButtonTarget });
   getBest();
   getEvent();
   getTheme();
@@ -232,6 +181,12 @@ const createRollKeyword = async target => {
   const rollKeyword = new RollKeyword({target, keywords});
   rollKeyword.init();
 }
+
+const createBox = ({ target, buttonTarget }) => {
+  const box = new Box({ target, buttonTarget });
+  box.init();
+}
+
 
 init();
 
