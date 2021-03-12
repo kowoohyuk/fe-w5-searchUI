@@ -42,7 +42,7 @@ app.get('/search', async (req, res) => {
   const { query : { word } } = req;
   try {
     res.status(200);
-    const data = await fetch(AMAZONPATH + word);
+    const data = await fetch(new URL(AMAZONPATH + word).href);
     const json = await data.json();
     const result = json.suggestions.reduce((acc, cur) => [...acc, cur.value], []);
     res.json({'list' : result});

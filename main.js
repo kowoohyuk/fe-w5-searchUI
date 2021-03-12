@@ -28,7 +28,14 @@ const init = async () => {
   createEvent({ target : eventTarget, pagingTarget : eventPagingTarget });
   createBox({ target : boxTarget, buttonTarget : moreButtonTarget });
   createCarouselBox({ target : carouselBoxTarget, pagingTarget : carouselBoxPagingTarget });
-  createSearchList({ keywordTarget : keywordListTarget, searchTarget : searchListTarget, searchBarTarget, searchTextTarget, rollKeywordTarget, keywords });
+  createSearchList({ 
+    keywordTarget : keywordListTarget, 
+    searchTarget : searchListTarget, 
+    searchBarTarget, 
+    searchTextTarget, 
+    rollKeywordTarget, 
+    keywords 
+  });
 }
 
 const createRollKeyword = ({ target, keywords }) => {
