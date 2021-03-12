@@ -1,8 +1,9 @@
 header {
   background-color: #fff;
+  z-index: 1;
   .row-search {
     text-align: center;
-    padding: 0 22vw;
+    padding: 0 15vw;
     padding-top: 5vh;
     display: grid;
     grid-template-columns: 1fr 6fr;
@@ -14,6 +15,8 @@ header {
   }
   .search-bar {
     position: relative;
+    height: 0;
+    z-index: 1;
     &__input {
       @extend .fw-600;
       @extend .f-18;
@@ -23,6 +26,10 @@ header {
       height: 50px;
       width: 90%;
       padding: 0.5em 2em;
+      padding-left: 1em;
+      &.active {
+        border-color: #f95139;
+      }
     }
     &__button {
       position: absolute;

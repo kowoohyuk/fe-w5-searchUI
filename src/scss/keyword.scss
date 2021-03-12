@@ -1,8 +1,11 @@
 .roll-keyword {
   position: absolute;
   top: 0;
+  left: 20px;
   overflow: hidden;
   height: 50px;
+  user-select: none;
+  pointer-events: none;
   .keyword {
     padding: 0 2.5em;
     text-align: left;

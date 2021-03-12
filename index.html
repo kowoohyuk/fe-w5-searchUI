@@ -13,14 +13,20 @@
       <div class="logo">
         <img class="logo__img" src="./images/logo.png" alt="쇼핑하우" title="쇼핑하우 로고">
       </div>
-      <div class="search-bar">
-        <input class="search-bar__input">
+      <div class="search-bar" id="searchBarTarget">
+        <input class="search-bar__input" id="searchTextTarget">
         <button class="search-bar__button" id="searchButton">
           <span class="search-bar__button__image-span">
         </button>
         <div class="roll-keyword">
           <ul class="keyword" id="rollKeywordTarget">
           </ul>
+        </div>
+        <div class="inner-keyword hidden" id="keywordListTarget">
+          <ul class="keyword"></ul>
+        </div>
+        <div class="inner-keyword hidden" id="searchListTarget">
+          <ul class="keyword"></ul>
         </div>
       </div>
     </div>
@@ -66,13 +72,9 @@
       <h2 class="section-title">지금뜨는 테마 카테고리</h2>
       <div class="col-10">
         <div class="col-10 box box-carousel">
-          <div class="col-10 box-carousel__items" id="themeTarget">
+          <div class="col-10 box-carousel__items" id="carouselBoxTarget">
           </div>
-          <div class="box-paging">
-            <div class="box-paging__arrow" id="themePagingArrow">
-              <div class="box-paging__arrow__left" data-arrow="prev"></div>
-              <div class="box-paging__arrow__right" data-arrow="next"></div>
-            </div>
+          <div class="box-paging" id="carouselBoxPagingTarget">
           </div>
         </div>
       </div>   
