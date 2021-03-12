@@ -20,6 +20,8 @@ Search.prototype = {
   createKeywordEvent,
   clickKeyword,
   createSearchTextEvent,
+  handleSearchTextEvent,
+  selectSearchTargetItem,
   searchText,
   getSearchList,
   renderSearchList,
@@ -69,13 +71,40 @@ function createSearchTextEvent() {
   const { searchTextTarget } = this;
   searchTextTarget.addEventListener('focusin', () => this.handleList('in'));
   searchTextTarget.addEventListener('focusout', () => this.handleList('out'));
-  searchTextTarget.addEventListener('keyup', ({ target }) => this.searchText(target));
+  searchTextTarget.addEventListener('keydown', e => this.handleSearchTextEvent(e));
+}
+
+function handleSearchTextEvent(event) {
+  switch(event.key) {
+    case 'ENTER': break; // 로컬스토리지로 캐시 구현
+    case 'ArrowUp': this.selectSearchTargetItem(event, 'up'); break;
+    case 'ArrowDown': this.selectSearchTargetItem(event, 'down'); break;
+    default: this.searchText(event.target); break;
+  }
 }
 
 function searchText(target) {
-  clearTimeout(this.timeOut);
+  if(this.timeOut) clearTimeout(this.timeOut);
   this.timeOut = setTimeout(() => this.getSearchList(target.value), 1000);
 };
+
+function selectSearchTargetItem(event, type) {
+  const { searchList } = this;
+  if(!searchList) return;
+
+  event.preventDefault();
+
+  const activeIndex = +(searchList.dataset.active || -1);
+  if(activeIndex !== -1)
+    searchList.childNodes[activeIndex].classList.remove('active');
+  let nextActiveIndex = activeIndex + (type === 'up' ? -1 : 1);
+  if(nextActiveIndex < 0)
+    nextActiveIndex = searchList.childNodes.length - 1;
+  if(nextActiveIndex > searchList.childNodes.length - 1)
+    nextActiveIndex = 0;
+  searchList.dataset.active = nextActiveIndex;
+  searchList.childNodes[nextActiveIndex].classList.add('active');
+}
 
 async function getSearchList(value) {
   if(value !== '') {
@@ -91,8 +120,10 @@ function renderSearchList(list, value) {
     searchTarget,
     keywordTarget,
   } = this;
+  this.searchList = null;
+  const ul = searchTarget.querySelector('ul');
   if(list.length < 1) {
-    searchTarget.querySelector('ul').innerHTML = '';
+    ul.innerHTML = '';
     searchTarget.classList.add('hidden');
     keywordTarget.classList.remove('hidden');
     return;
@@ -101,7 +132,8 @@ function renderSearchList(list, value) {
     acc += `<li data-value="${cur}"><a target="_blank" href="https://www.amazon.com/s?k=${encodeURI(cur)}&sprefix=${encodeURI(cur)}"><span>${cur.replace(value, `<span class="highlight-color">${value}</span>`)}</span></a></li>`;
     return acc;
   }, '');
-  searchTarget.querySelector('ul').innerHTML = str;
+  ul.innerHTML = str;
+  this.searchList = ul;
   searchTarget.classList.remove('hidden');
   keywordTarget.classList.add('hidden');
 }

@@ -23,7 +23,6 @@ const api = new API();
 
 const init = async () => {
   const keywords = await api.getKeyword();
-
   createRollKeyword({ target : rollKeywordTarget, keywords });
   createBest(bestItemTarget);
   createEvent({ target : eventTarget, pagingTarget : eventPagingTarget });
@@ -60,8 +59,8 @@ const createCarouselBox = async ({ target, pagingTarget }) => {
   carouselBox.init();
 }
 
-const createSearchList = ({ keywordTarget, searchTarget, searchBarTarget, searchTextTarget, rollKeywordTarget, keywords }) => {
-  const search = new Search({ keywordTarget, searchTarget, searchBarTarget, searchTextTarget, rollKeywordTarget, keywords });
+const createSearchList = args => {
+  const search = new Search(args);
   search.init();
 }
 
