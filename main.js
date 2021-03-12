@@ -4,6 +4,7 @@ import Best from './src/javascript/best.js';
 import Event from './src/javascript/event.js';
 import Box from './src/javascript/box.js';
 import CarouselBox from './src/javascript/carouselBox.js';
+import Search from './src/javascript/search.js';
 
 const rollKeywordTarget = document.getElementById('rollKeywordTarget');
 const bestItemTarget = document.getElementById('bestTarget');
@@ -14,6 +15,9 @@ const moreButtonTarget = document.getElementById('moreButtonTarget');
 const carouselBoxTarget = document.getElementById('carouselBoxTarget');
 const carouselBoxPagingTarget = document.getElementById('carouselBoxPagingTarget');
 const keywordListTarget = document.getElementById('keywordListTarget');
+const searchListTarget = document.getElementById('searchListTarget');
+const searchBarTarget = document.getElementById('searchBarTarget');
+const searchTextTarget = document.getElementById('searchTextTarget');
 
 const api = new API();
 
@@ -25,6 +29,7 @@ const init = async () => {
   createEvent({ target : eventTarget, pagingTarget : eventPagingTarget });
   createBox({ target : boxTarget, buttonTarget : moreButtonTarget });
   createCarouselBox({ target : carouselBoxTarget, pagingTarget : carouselBoxPagingTarget });
+  createSearchList({ keywordTarget : keywordListTarget, searchTarget : searchListTarget, searchBarTarget, searchTextTarget, rollKeywordTarget, keywords });
 }
 
 const createRollKeyword = ({ target, keywords }) => {
@@ -53,6 +58,11 @@ const createCarouselBox = async ({ target, pagingTarget }) => {
   const data = await api.getItem({ type : 'carousel' });
   const carouselBox = new CarouselBox({ target, pagingTarget, ...data });
   carouselBox.init();
+}
+
+const createSearchList = ({ keywordTarget, searchTarget, searchBarTarget, searchTextTarget, rollKeywordTarget, keywords }) => {
+  const search = new Search({ keywordTarget, searchTarget, searchBarTarget, searchTextTarget, rollKeywordTarget, keywords });
+  search.init();
 }
 
 init();
